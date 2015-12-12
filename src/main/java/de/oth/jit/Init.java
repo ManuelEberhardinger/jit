@@ -46,7 +46,7 @@ public class Init implements ICommand {
         File jitFolder = new File(pathToFolder + "/.jit");
 
         if (jitFolder.exists()) {
-            System.out.println("Repository already existst.");
+            System.out.println("Repository already exists.");
             FileUtils.deleteFolder(jitFolder);
             System.out.println("Repository will be re-initialized…");
         }
