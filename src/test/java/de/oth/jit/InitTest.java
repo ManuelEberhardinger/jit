@@ -23,11 +23,12 @@ public class InitTest {
     @BeforeClass
     public static void setUpClass() {
         instance = new Init(new File("./testFolder"));
+        instance.getPath().mkdir();
     }
     
     @AfterClass
     public static void tearDownClass() throws FileNotFoundException {
-        FileUtils.deleteFolder(instance.getPath());
+        //FileUtils.deleteFolder(instance.getPath());
     }
     
     @Before
@@ -43,13 +44,9 @@ public class InitTest {
      */
     @Test
     public void testGetName() {
-        System.out.println("getName");
-        Init instance = null;
-        String expResult = "";
+        String expResult = "init";
         String result = instance.getName();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -57,14 +54,26 @@ public class InitTest {
      */
     @Test
     public void testExecute() throws Exception {
-        System.out.println("execute");
-        String arg = "";
-        Init instance = null;
-        boolean expResult = false;
-        boolean result = instance.execute(arg);
+        boolean expResult = true;
+        boolean result = instance.execute(null);
+        
+        // Test if repository is created.
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        // Test if objects and staging folder is created.
+        Init directory = new Init(new File(instance.getPath().getCanonicalPath() + "/.jit"));
+        
+        File[] folders = directory.getPath().listFiles();
+        
+        for(File f : folders) {
+            if(f.getName() == "objects")
+                assertEquals(expResult, f.exists());
+            else if(f.getName() == "staging")
+                assertEquals(expResult, f.exists());
+        }
+        
+        // Test if only 2 folders are created.
+        assertEquals(2, folders.length);
     }
     
 }
