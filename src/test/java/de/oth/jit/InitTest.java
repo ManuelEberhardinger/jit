@@ -28,17 +28,9 @@ public class InitTest {
     
     @AfterClass
     public static void tearDownClass() throws FileNotFoundException {
-        //FileUtils.deleteFolder(instance.getPath());
+        FileUtils.deleteFolder(instance.getPath());
     }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
+   
     /**
      * Test of getName method, of class Init.
      */

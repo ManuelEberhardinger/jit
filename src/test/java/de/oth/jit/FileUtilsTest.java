@@ -6,10 +6,6 @@
 package de.oth.jit;
 
 import java.io.File;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,38 +14,26 @@ import static org.junit.Assert.*;
  * @author manueleberhardinger
  */
 public class FileUtilsTest {
-    
-    public FileUtilsTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of deleteFolder method, of class FileUtils.
      */
     @Test
     public void testDeleteFolder() throws Exception {
-        System.out.println("deleteFolder");
-        File path = null;
-        boolean expResult = false;
+        File path = new File("./testDeleteFolder");
+        File morePaths = new File(path.getCanonicalPath() + "/test1/test2/test3");
+        File createFile = new File(path.getCanonicalPath() + "/test1/test.txt");
+        
+        boolean expResult = true;
+        
+        path.mkdir();
+        morePaths.mkdirs();
+        createFile.createNewFile();
+        
         boolean result = FileUtils.deleteFolder(path);
+        
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertFalse(path.exists());
     }
     
 }
