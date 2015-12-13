@@ -13,7 +13,7 @@ import java.io.*;
  */
 public class Init implements ICommand {
 
-    private final File _path;
+    private final File _file;
     private final String _name = "init";
 
     public Init(File path) {
@@ -21,12 +21,12 @@ public class Init implements ICommand {
             throw new NullPointerException("path");
         }
 
-        _path = path;
+        _file = path;
     }
     
     @Override
-    public File getPath() {
-        return _path;
+    public File getFile() {
+        return _file;
     }
 
     @Override
@@ -36,12 +36,12 @@ public class Init implements ICommand {
 
     @Override
     public boolean execute(String arg) throws IOException {
-        if (!_path.isDirectory()) {
+        if (!_file.isDirectory()) {
             System.out.println("Path points to no directory. Can not initialize repository…");
             return false;
         }
 
-        String pathToFolder = _path.getCanonicalPath();
+        String pathToFolder = _file.getCanonicalPath();
 
         File jitFolder = new File(pathToFolder + "/.jit");
 

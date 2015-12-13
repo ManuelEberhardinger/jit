@@ -23,12 +23,12 @@ public class InitTest {
     @BeforeClass
     public static void setUpClass() {
         instance = new Init(new File("./testFolder"));
-        instance.getPath().mkdir();
+        instance.getFile().mkdir();
     }
     
     @AfterClass
     public static void tearDownClass() throws FileNotFoundException {
-        FileUtils.deleteFolder(instance.getPath());
+        FileUtils.deleteFolder(instance.getFile());
     }
    
     /**
@@ -53,9 +53,9 @@ public class InitTest {
         assertEquals(expResult, result);
         
         // Test if objects and staging folder is created.
-        Init directory = new Init(new File(instance.getPath().getCanonicalPath() + "/.jit"));
+        Init directory = new Init(new File(instance.getFile().getCanonicalPath() + "/.jit"));
         
-        File[] folders = directory.getPath().listFiles();
+        File[] folders = directory.getFile().listFiles();
         
         for(File f : folders) {
             if(f.getName() == "objects")

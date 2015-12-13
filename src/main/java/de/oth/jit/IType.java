@@ -5,17 +5,15 @@
  */
 package de.oth.jit;
 
-import java.io.*;
+import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
  * @author manueleberhardinger
  */
-public interface ICommand  {
-
+public interface IType extends Serializable{
+    public String getType();
+    public String getHash() throws NoSuchAlgorithmException;
     public String getName();
-
-    public File getFile();
-
-    public boolean execute(String arg) throws IOException, ClassNotFoundException;
 }
