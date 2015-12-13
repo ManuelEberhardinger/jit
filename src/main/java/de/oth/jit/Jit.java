@@ -36,6 +36,7 @@ public class Jit {
         List<ICommand> commandList = new ArrayList<>();
         commandList.add(new Init(path));
         commandList.add(new Add(path));
+        commandList.add(new Remove(path));
 
         for(ICommand command : commandList) {
             if(toExecute.equals(command.getName())){

@@ -37,7 +37,6 @@ public class Add implements ICommand {
     @Override
     public boolean execute(String arg) throws IOException, ClassNotFoundException {
         if (arg.equals("") || arg == null || !new File("./" + arg).exists()) {
-            System.out.println(new File("./" + arg).getCanonicalPath());
             System.out.println("Path points to no file or directory…");
             return false;
         }
@@ -66,6 +65,7 @@ public class Add implements ICommand {
             } else if(tmpFile.isFile()){
                 tree.add(new FileNode(folders[0]));
                 FileUtils.writeStaging(tree);
+                System.out.println("File added.");
                 return true;
             }
 
@@ -82,6 +82,7 @@ public class Add implements ICommand {
             } else if (tmpFile.isFile()) {
                 node.add(new FileNode(folders[i]));
                 FileUtils.writeStaging(tree);
+                System.out.println("File added.");
                 return true;
             }
 

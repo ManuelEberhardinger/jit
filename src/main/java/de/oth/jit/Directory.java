@@ -57,8 +57,10 @@ public class Directory implements IType, Serializable {
         _childern.add(node);
     }
 
-    public void remove(IType node) {
-        _childern.remove(node);
+    public boolean remove(IType node) {
+        if(_childern.remove(node))
+            return true;
+        else return false;
     }
 
     public boolean exists(String name) {
@@ -81,4 +83,12 @@ public class Directory implements IType, Serializable {
         return null;
     }
 
+    public IType getNext(String name) {
+        for (IType node : _childern) {
+            if (node.getName().equals(name)) {
+                return node;
+            }
+        }
+        return null;
+    }
 }
