@@ -5,9 +5,14 @@
  */
 package de.oth.jit;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,13 +22,22 @@ public class Directory implements IType, Serializable {
 
     private List<IType> _childern = new ArrayList<>();
     private String _name;
+    private Path _path;
 
-    public Directory(String name) {
+    public Directory(String name, String path) {
         if (name == null) {
             throw new NullPointerException("name");
         }
+        if(path == null)
+            throw new NullPointerException("path");
 
         _name = name;
+        _path = Paths.get(path);
+    }
+    
+    @Override
+    public Path getPath() {
+        return _path;
     }
 
     @Override
@@ -32,7 +46,7 @@ public class Directory implements IType, Serializable {
     }
 
     @Override
-    public String getHash() throws NoSuchAlgorithmException {
+    public String getHash() throws NoSuchAlgorithmException, IOException {
         String allPaths = "";
         for (IType node : _childern) {
             allPaths += node.getHash();

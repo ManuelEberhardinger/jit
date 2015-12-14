@@ -47,7 +47,7 @@ public class Add implements ICommand {
         if (new File(path).exists()) {
             tree = FileUtils.readStaging(path);
         } else {
-            tree = new Directory(".");
+            tree = new Directory(".", ".");
         }
 
         String[] folders = arg.split("/");
@@ -64,9 +64,9 @@ public class Add implements ICommand {
             tmpFile = new File(pathToFile);
 
             if (tmpFile.isDirectory() && !node.exists(folders[i])) {
-                node.add(new Directory(folders[i]));
+                node.add(new Directory(folders[i], pathToFile));
             } else if (tmpFile.isFile()) {
-                node.add(new FileNode(folders[i]));
+                node.add(new FileNode(folders[i], pathToFile));
                 FileUtils.writeStaging(tree);
                 System.out.println("File added.");
                 return true;

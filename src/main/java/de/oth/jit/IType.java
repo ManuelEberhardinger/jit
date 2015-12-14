@@ -5,7 +5,9 @@
  */
 package de.oth.jit;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -13,7 +15,8 @@ import java.security.NoSuchAlgorithmException;
  * @author manueleberhardinger
  */
 public interface IType extends Serializable{
+    public Path getPath();
     public String getType();
-    public String getHash() throws NoSuchAlgorithmException;
+    public String getHash() throws NoSuchAlgorithmException, IOException;
     public String getName();
 }
