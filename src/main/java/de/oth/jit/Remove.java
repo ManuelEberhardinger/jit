@@ -55,6 +55,9 @@ public class Remove implements ICommand {
         node = tree;
         String[] folders = arg.split("/");
         for (int i = 0; i < folders.length; i++) {
+            if(folders[i].equals(""))
+                continue;
+            
             if (i == folders.length-1 && node.getNext(folders[folders.length - 1]) != null) {
                 toDel = node.getNext(folders[folders.length - 1]);
                 if (toDel.getName().equals(folders[folders.length - 1])) {

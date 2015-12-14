@@ -54,26 +54,12 @@ public class Add implements ICommand {
         String pathToFile = ".";
 
         File tmpFile;
-
-        if (folders.length >= 1) {
-
-            pathToFile += "/" + folders[0];
-            tmpFile = new File(pathToFile);
-
-            if (tmpFile.isDirectory() && !tree.exists(folders[0])) {
-                tree.add(new Directory(folders[0]));
-            } else if(tmpFile.isFile()){
-                tree.add(new FileNode(folders[0]));
-                FileUtils.writeStaging(tree);
-                System.out.println("File added.");
-                return true;
-            }
-
-        }
-
-        Directory node = tree.getDirectory(folders[0]);
+        Directory node = tree;
 
         for (int i = 1; i < folders.length; i++) {
+            if(folders[i].equals(""))
+                continue;
+            
             pathToFile += "/" + folders[i];
             tmpFile = new File(pathToFile);
 
