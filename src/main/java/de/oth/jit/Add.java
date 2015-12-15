@@ -56,7 +56,7 @@ public class Add implements ICommand {
         File tmpFile;
         Directory node = tree;
 
-        for (int i = 1; i < folders.length; i++) {
+        for (int i = 0; i < folders.length; i++) {
             if(folders[i].equals(""))
                 continue;
             

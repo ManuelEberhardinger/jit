@@ -17,5 +17,5 @@ public interface ICommand  {
 
     public File getFile();
 
-    public boolean execute(String arg) throws IOException, ClassNotFoundException;
+    public boolean execute(String arg) throws Exception;
 }

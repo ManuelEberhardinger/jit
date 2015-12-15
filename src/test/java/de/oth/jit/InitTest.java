@@ -58,9 +58,9 @@ public class InitTest {
         File[] folders = directory.getFile().listFiles();
         
         for(File f : folders) {
-            if(f.getName() == "objects")
+            if("objects".equals(f.getName()))
                 assertEquals(expResult, f.exists());
-            else if(f.getName() == "staging")
+            else if("staging".equals(f.getName()))
                 assertEquals(expResult, f.exists());
         }
         

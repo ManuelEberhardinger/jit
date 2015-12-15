@@ -15,8 +15,9 @@ import java.security.NoSuchAlgorithmException;
  * @author manueleberhardinger
  */
 public interface IType extends Serializable{
-    public Path getPath();
+    public String getPath();
     public String getType();
     public String getHash() throws NoSuchAlgorithmException, IOException;
     public String getName();
+    public String getFullString();
 }

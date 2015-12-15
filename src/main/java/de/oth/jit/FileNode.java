@@ -8,7 +8,6 @@ package de.oth.jit;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 
@@ -17,18 +16,20 @@ import java.security.NoSuchAlgorithmException;
  * @author manueleberhardinger
  */
 public class FileNode implements IType, Serializable {
-    
+
     private String _name;
-    private Path _path;
-    
+    private String _path;
+
     public FileNode(String name, String path) {
-        if(name == null)
+        if (name == null) {
             throw new NullPointerException("name");
-        if(path == null)
+        }
+        if (path == null) {
             throw new NullPointerException("path");
-        
+        }
+
         _name = name;
-        _path = Paths.get(path);
+        _path = path;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class FileNode implements IType, Serializable {
 
     @Override
     public String getHash() throws NoSuchAlgorithmException, IOException {
-        return FileUtils.hashObject(Files.readAllBytes(_path));
+        return FileUtils.hashObject(Files.readAllBytes(Paths.get(_path)));
     }
 
     @Override
@@ -47,8 +48,17 @@ public class FileNode implements IType, Serializable {
     }
 
     @Override
-    public Path getPath() {
+    public String getPath() {
         return _path;
     }
-    
+
+    @Override
+    public String getFullString() {
+        try {
+            return getType() + " " + getHash() + " " + getName();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
 }

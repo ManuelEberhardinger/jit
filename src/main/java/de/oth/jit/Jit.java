@@ -14,7 +14,7 @@ import java.io.*;
  */
 public class Jit {
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws Exception {
         File path = new File(".");
         String toExecute = null;
         String parameter = null;
@@ -37,6 +37,8 @@ public class Jit {
         commandList.add(new Init(path));
         commandList.add(new Add(path));
         commandList.add(new Remove(path));
+        commandList.add(new CommitCommand(path));
+        commandList.add(new Checkout(path));
 
         for(ICommand command : commandList) {
             if(toExecute.equals(command.getName())){

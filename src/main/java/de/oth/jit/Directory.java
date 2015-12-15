@@ -7,12 +7,9 @@ package de.oth.jit;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -22,21 +19,22 @@ public class Directory implements IType, Serializable {
 
     private List<IType> _childern = new ArrayList<>();
     private String _name;
-    private Path _path;
+    private String _path;
 
     public Directory(String name, String path) {
         if (name == null) {
             throw new NullPointerException("name");
         }
-        if(path == null)
+        if (path == null) {
             throw new NullPointerException("path");
+        }
 
         _name = name;
-        _path = Paths.get(path);
+        _path = path;
     }
-    
+
     @Override
-    public Path getPath() {
+    public String getPath() {
         return _path;
     }
 
@@ -49,7 +47,7 @@ public class Directory implements IType, Serializable {
     public String getHash() throws NoSuchAlgorithmException, IOException {
         String allPaths = "";
         for (IType node : _childern) {
-            allPaths += node.getHash();
+            allPaths += node.getFullString();
         }
         return FileUtils.hashObject(allPaths.getBytes());
     }
@@ -72,9 +70,11 @@ public class Directory implements IType, Serializable {
     }
 
     public boolean remove(IType node) {
-        if(_childern.remove(node))
+        if (_childern.remove(node)) {
             return true;
-        else return false;
+        } else {
+            return false;
+        }
     }
 
     public boolean exists(String name) {
@@ -104,5 +104,28 @@ public class Directory implements IType, Serializable {
             }
         }
         return null;
+    }
+
+    public List<String> getAllChildernStrings() throws NoSuchAlgorithmException, IOException {
+        List<String> allChilderns = _childern.stream()
+                .map(IType::getFullString)
+                .collect(Collectors.toList());
+        return allChilderns;
+    }
+    
+    public List<String> getAllChildernNames() {
+        List<String> allNames = _childern.stream()
+                                         .map(IType::getName)
+                                         .collect(Collectors.toList());
+        return allNames;
+    }
+
+    @Override
+    public String getFullString() {
+        try {
+            return getType() + " " + getHash() + " " + getName();
+        } catch (Exception ex) {
+            return null;
+        }
     }
 }

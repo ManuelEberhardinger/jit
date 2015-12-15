@@ -6,8 +6,6 @@
 package de.oth.jit;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -18,24 +16,27 @@ public class Commit implements IType, Serializable {
 
     // Represents commit message
     private String _name;
-    
-    private Path _path;
-    
+
+    private String _path;
+
     private IType _directory;
-    
+
     public Commit(String name, String path, IType directory) {
-        if(name == null)
+        if (name == null) {
             throw new NullPointerException("name");
-        if(path == null)
+        }
+        if (path == null) {
             throw new NullPointerException("path");
-        if(directory == null)
+        }
+        if (directory == null) {
             throw new NullPointerException("directory");
-        
+        }
+
         _name = name;
-        _path = Paths.get(path);
+        _path = path;
         _directory = directory;
     }
-    
+
     @Override
     public String getType() {
         return "Commit";
@@ -43,7 +44,7 @@ public class Commit implements IType, Serializable {
 
     @Override
     public String getHash() throws NoSuchAlgorithmException, IOException {
-        return FileUtils.hashObject((this.toString() + _directory.getHash()).getBytes());
+        return FileUtils.hashObject((this.getType() + _directory.getFullString() +  this.getName()).getBytes());
     }
 
     @Override
@@ -52,8 +53,16 @@ public class Commit implements IType, Serializable {
     }
 
     @Override
-    public Path getPath() {
+    public String getPath() {
         return _path;
     }
-    
+
+    @Override
+    public String getFullString() {
+        try {
+            return getType() + " " + getHash() + " " + getName();
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 }
