@@ -6,7 +6,6 @@
 package de.oth.jit;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.*;
@@ -63,11 +62,13 @@ public class CommitCommand implements ICommand {
         // Create file for commit 
         _path = Paths.get(_root + "/" + commit.getHash());
         _lines.add(commit.getType() + " " + commit.getName());
-        _lines.add(tree.getFullString());
+        _lines.addAll(tree.getAllChildernStrings());
         Files.write(_path, _lines, Charset.forName("UTF-8"));
 
         // Creates files for the rest
-        writeDirectoryOrFile(tree);
+        for(String childernPath : tree.getAllChildernNames()) {
+            writeDirectoryOrFile(tree.getDirectory(childernPath));
+        }
 
         return true;
     }
@@ -90,7 +91,7 @@ public class CommitCommand implements ICommand {
             _lines.addAll(nodeDirectory.getAllChildernStrings());
             Files.write(_path, _lines, Charset.forName("UTF-8"));
             List<String> allNames = nodeDirectory.getAllChildernNames();
-            System.out.println(new String(Files.readAllBytes(_path), "UTF-8"));
+
             for (String name : allNames) {
                 writeDirectoryOrFile(nodeDirectory.getNext(name));
             }

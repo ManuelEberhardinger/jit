@@ -7,6 +7,10 @@ package de.oth.jit;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.*;
 
 /**
  *
@@ -37,7 +41,47 @@ public class Checkout implements ICommand {
 
     @Override
     public boolean execute(String arg) throws IOException, ClassNotFoundException {
+        if (arg == null || arg == "") {
+            System.out.println("False commit hash…");
+            return false;
+        }
+
+        Path commitRoot = Paths.get("./.jit/objects/" + arg);
+
+        if (!Files.exists(commitRoot)) {
+            System.out.println("Commit does not exists…");
+        }
+
+        // Read commit file and delete the root folders of the added files.
+        List<String> lines = Files.readAllLines(commitRoot);
+        for (String line : lines) {
+            String[] words = line.split(" ");
+            try {
+                Files.deleteIfExists(Paths.get("./" + words[2]));
+            } catch (Exception ex) {
+            }
+        }
+
+        // Restore all files
+        restoreFile(lines, ".");
+
         return true;
+    }
+
+    private void restoreFile(List<String> lines, String path) throws IOException {
+        for (String line : lines) {
+            String[] words = line.split(" ");
+
+            if (words[0].equals("Commit") && words.length == 2) {
+                System.out.println("Checkout commit \"" + words[1] + "\"…");
+            } else if (words[0].equals("Directory") && words.length == 3) {
+                Files.createDirectory(Paths.get(path + "/" + words[2]));
+                restoreFile(Files.readAllLines(Paths.get("./.jit/objects/" + words[1])), path + "/" + words[2]);
+            } else if (words[0].equals("File") && words.length == 3) {
+                Files.write(Paths.get(path + "/" + words[2]), Files.readAllLines(Paths.get("./.jit/objects/" + words[1]), StandardCharsets.UTF_8));
+            }
+
+        }
     }
 
 }
