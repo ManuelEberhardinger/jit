@@ -64,6 +64,7 @@ public class CommitCommand implements ICommand {
         _lines.add(commit.getType() + " " + commit.getName());
         _lines.addAll(tree.getAllChildernStrings());
         Files.write(_path, _lines, Charset.forName("UTF-8"));
+        System.out.println("Created commit with hash: " + commit.getHash());
 
         // Creates files for the rest
         for(String childernPath : tree.getAllChildernNames()) {

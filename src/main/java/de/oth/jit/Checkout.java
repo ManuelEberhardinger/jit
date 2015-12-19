@@ -54,11 +54,13 @@ public class Checkout implements ICommand {
 
         // Read commit file and delete the root folders of the added files.
         List<String> lines = Files.readAllLines(commitRoot);
-        for (String line : lines) {
-            String[] words = line.split(" ");
-            try {
-                Files.deleteIfExists(Paths.get("./" + words[2]));
-            } catch (Exception ex) {
+
+        try(DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("."))) {
+            for(Path entry : stream) {
+                if(entry.endsWith(".jit")) {
+                    continue;
+                }
+                FileUtils.deleteFolder(entry.toFile());
             }
         }
 
@@ -72,13 +74,18 @@ public class Checkout implements ICommand {
         for (String line : lines) {
             String[] words = line.split(" ");
 
-            if (words[0].equals("Commit") && words.length == 2) {
-                System.out.println("Checkout commit \"" + words[1] + "\"…");
+            if (words[0].equals("Commit")) {
+                String msg = "";
+                for(int i = 1; i < words.length; i++) {
+                    msg += words[i] + " ";
+                }
+                
+                System.out.println("Checkout commit \"" + msg.trim() + "\"");
             } else if (words[0].equals("Directory") && words.length == 3) {
                 Files.createDirectory(Paths.get(path + "/" + words[2]));
                 restoreFile(Files.readAllLines(Paths.get("./.jit/objects/" + words[1])), path + "/" + words[2]);
             } else if (words[0].equals("File") && words.length == 3) {
-                Files.write(Paths.get(path + "/" + words[2]), Files.readAllLines(Paths.get("./.jit/objects/" + words[1]), StandardCharsets.UTF_8));
+                Files.write(Paths.get(path + "/" + words[2]), Files.readAllBytes(Paths.get("./.jit/objects/" + words[1])));
             }
 
         }
