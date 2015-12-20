@@ -85,6 +85,8 @@ public class Add implements ICommand {
             node = node.getDirectory(folders[i]);
 
         }
+        // If only a directory is added we reach this point.
+        System.out.println("File added.");
         FileUtils.writeStaging(tree);
         return true;
     }
