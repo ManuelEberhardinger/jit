@@ -7,12 +7,12 @@ package de.oth.jit;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 
 /**
  *
- * @author manueleberhardinger
+ * Interface for the Directory, FileNode and Commit.
+ * It is needed for the Composition pattern to create a tree for the staging.
  */
 public interface IType extends Serializable{
     public String getPath();

@@ -13,11 +13,12 @@ import java.util.stream.Collectors;
 
 /**
  *
- * @author manueleberhardinger
+ * Represents a directory or folder of the staging tree.
+ * The directory is able to save other directories and files in his _childern field.
  */
 public class Directory implements IType, Serializable {
 
-    private List<IType> _childern = new ArrayList<>();
+    private final List<IType> _childern = new ArrayList<>();
     private String _name;
     private String _path;
 
@@ -43,6 +44,8 @@ public class Directory implements IType, Serializable {
         return "Directory";
     }
 
+    // Hashes the directory with all the full strings of the _childern of the directory.
+    // So you get a unique hash.
     @Override
     public String getHash() throws NoSuchAlgorithmException, IOException {
         String allPaths = "";
@@ -57,6 +60,7 @@ public class Directory implements IType, Serializable {
         return _name;
     }
 
+    // add a child to the directory. If the child already exists it will be replaced.
     public void add(IType node) {
         if (node.getType().equals("File")) {
             for (int i = 0; i < _childern.size(); i++) {
@@ -69,6 +73,7 @@ public class Directory implements IType, Serializable {
         _childern.add(node);
     }
 
+    // remove a child.
     public boolean remove(IType node) {
         if (_childern.remove(node)) {
             return true;
@@ -77,6 +82,7 @@ public class Directory implements IType, Serializable {
         }
     }
 
+    // Checks if a child with the given name exists.
     public boolean exists(String name) {
         if (_childern.stream().anyMatch((node) -> (node.getName().equals(name)))) {
             return true;
@@ -84,6 +90,7 @@ public class Directory implements IType, Serializable {
         return false;
     }
 
+    // Returns a child, that is a directory if it exists, otherwise it will be returned null.
     public Directory getDirectory(String name) {
         for (IType node : _childern) {
             if (node.getName().equals(name)) {
@@ -97,6 +104,7 @@ public class Directory implements IType, Serializable {
         return null;
     }
 
+    // get the next child by name. 
     public IType getNext(String name) {
         for (IType node : _childern) {
             if (node.getName().equals(name)) {
@@ -106,6 +114,7 @@ public class Directory implements IType, Serializable {
         return null;
     }
 
+    // get all full strings of the childern of the directory as a list.
     public List<String> getAllChildernStrings() throws NoSuchAlgorithmException, IOException {
         List<String> allChilderns = _childern.stream()
                 .map(IType::getFullString)
@@ -113,6 +122,7 @@ public class Directory implements IType, Serializable {
         return allChilderns;
     }
     
+    // get all names of the childern as a list.
     public List<String> getAllChildernNames() {
         List<String> allNames = _childern.stream()
                                          .map(IType::getName)
@@ -120,6 +130,7 @@ public class Directory implements IType, Serializable {
         return allNames;
     }
 
+    // Returns a string with type, hash and name.
     @Override
     public String getFullString() {
         try {

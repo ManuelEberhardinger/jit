@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  *
- * @author manueleberhardinger
+ * Represents a commit of the staging tree.
  */
 public class Commit implements IType, Serializable {
 
@@ -42,6 +42,7 @@ public class Commit implements IType, Serializable {
         return "Commit";
     }
 
+    // Returns the hash with all the hashes of the root directory of the staging tree.
     @Override
     public String getHash() throws NoSuchAlgorithmException, IOException {
         return FileUtils.hashObject((this.getType() + _directory.getFullString() +  this.getName()).getBytes());
@@ -57,6 +58,7 @@ public class Commit implements IType, Serializable {
         return _path;
     }
 
+    // Returns a string with type, hash and name.
     @Override
     public String getFullString() {
         try {

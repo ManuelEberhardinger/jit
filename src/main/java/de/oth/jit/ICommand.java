@@ -9,7 +9,8 @@ import java.io.*;
 
 /**
  *
- * @author manueleberhardinger
+ * Interface for all commands so that we can save it in a list.
+ * It follows the Command pattern, so you can easily extend the commands.
  */
 public interface ICommand  {
 

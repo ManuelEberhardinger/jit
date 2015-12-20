@@ -9,7 +9,7 @@ import java.io.*;
 
 /**
  *
- * @author manueleberhardinger
+ * Initializes the repository.
  */
 public class Init implements ICommand {
 
@@ -34,6 +34,7 @@ public class Init implements ICommand {
         return _name;
     }
 
+    // Initializes the repository, create the .jit folder and the objects and staging folder.
     @Override
     public boolean execute(String arg) throws IOException {
         if (!_file.isDirectory()) {
@@ -45,6 +46,7 @@ public class Init implements ICommand {
 
         File jitFolder = new File(pathToFolder + "/.jit");
 
+        // If folder exists we have to delete the folders and re-create it.
         if (jitFolder.exists()) {
             System.out.println("Repository already exists.");
             FileUtils.deleteFolder(jitFolder);
@@ -54,6 +56,7 @@ public class Init implements ICommand {
         File objects = new File(pathToFolder + "/.jit/objects");
         File staging = new File(pathToFolder + "/.jit/staging");
 
+        // Create the directories.
         if (objects.mkdirs() && staging.mkdirs()) {
             System.out.println("Repository has been successfully created.");
         }

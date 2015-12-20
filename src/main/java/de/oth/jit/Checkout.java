@@ -7,14 +7,12 @@ package de.oth.jit;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
 /**
  *
- * @author manueleberhardinger
+ * Checkout the objects with the given hash of the commit.
  */
 public class Checkout implements ICommand {
 
@@ -39,6 +37,7 @@ public class Checkout implements ICommand {
         return _file;
     }
 
+    // Checkout the commit of the given hash.
     @Override
     public boolean execute(String arg) throws IOException, ClassNotFoundException {
         if (arg == null || arg == "") {
@@ -52,9 +51,10 @@ public class Checkout implements ICommand {
             System.out.println("Commit does not exists…");
         }
 
-        // Read commit file and delete the root folders of the added files.
+        // Read commit file.
         List<String> lines = Files.readAllLines(commitRoot);
 
+        // Deletes all entries of the directory, but not the .jit folder.
         try(DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("."))) {
             for(Path entry : stream) {
                 if(entry.endsWith(".jit")) {
@@ -70,10 +70,15 @@ public class Checkout implements ICommand {
         return true;
     }
 
+    // Restores all files and directories of the commit.
+    // lines: the content of the objects file
+    // path: the path we already re-created.
     private void restoreFile(List<String> lines, String path) throws IOException {
+        // Walk through all lines of the file.
         for (String line : lines) {
             String[] words = line.split(" ");
 
+            // If the file is a commit file, console will print info of the hash.
             if (words[0].equals("Commit")) {
                 String msg = "";
                 for(int i = 1; i < words.length; i++) {
@@ -82,9 +87,12 @@ public class Checkout implements ICommand {
                 
                 System.out.println("Checkout commit \"" + msg.trim() + "\"");
             } else if (words[0].equals("Directory") && words.length == 3) {
+                // If line points to a directory, directory will be created.
                 Files.createDirectory(Paths.get(path + "/" + words[2]));
+                // After that the method will be called again with the content of the next directory and the already created path.
                 restoreFile(Files.readAllLines(Paths.get("./.jit/objects/" + words[1])), path + "/" + words[2]);
             } else if (words[0].equals("File") && words.length == 3) {
+                // If the line points to a file, the file will be created and the contet will be copied.
                 Files.write(Paths.get(path + "/" + words[2]), Files.readAllBytes(Paths.get("./.jit/objects/" + words[1])));
             }
 

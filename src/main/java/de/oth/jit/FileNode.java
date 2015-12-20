@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  *
- * @author manueleberhardinger
+ * Represents a File for the staging tree. 
  */
 public class FileNode implements IType, Serializable {
 
@@ -37,6 +37,8 @@ public class FileNode implements IType, Serializable {
         return "File";
     }
 
+    // Hashes the object with the method of FileUtils.
+    // The hash is created with the content of the file so that the hash is unique.
     @Override
     public String getHash() throws NoSuchAlgorithmException, IOException {
         return FileUtils.hashObject(Files.readAllBytes(Paths.get(_path)));
@@ -52,6 +54,7 @@ public class FileNode implements IType, Serializable {
         return _path;
     }
 
+    // Returns a full string, like the one that is saved in the object files.
     @Override
     public String getFullString() {
         try {

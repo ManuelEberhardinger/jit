@@ -19,6 +19,7 @@ public class Jit {
         String toExecute = null;
         String parameter = null;
 
+        // Make sure that we have the correct number of parameters.
         if (args.length < 1 || args.length > 2) {
             displayHelp();
             return;
@@ -33,6 +34,7 @@ public class Jit {
             parameter = args[1];
         }
 
+        // Initialize the list of all commands.
         List<ICommand> commandList = new ArrayList<>();
         commandList.add(new Init(path));
         commandList.add(new Add(path));
@@ -40,6 +42,7 @@ public class Jit {
         commandList.add(new CommitCommand(path));
         commandList.add(new Checkout(path));
 
+        // Search for the the correct comman and execute it with the parameters.
         for(ICommand command : commandList) {
             if(toExecute.equals(command.getName())){
                 command.execute(parameter);
@@ -51,6 +54,7 @@ public class Jit {
         displayHelp();
     }
 
+    // Help message for usage of Jit.
     private static void displayHelp() {
         System.out.println("Usage:");
         System.out.println("    jit init");

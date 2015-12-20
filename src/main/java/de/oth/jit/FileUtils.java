@@ -11,10 +11,11 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  *
- * @author manueleberhardinger
+ * Class represents helper mehtods.
  */
 public class FileUtils {
 
+    // Deletes a complete directory, with all folders and files in it.
     public static boolean deleteFolder(File path) throws FileNotFoundException {
         if (!path.exists()) {
             throw new FileNotFoundException(path.getAbsolutePath());
@@ -27,7 +28,8 @@ public class FileUtils {
         }
         return ret && path.delete();
     }
-
+    
+    // Serializes the staging tree with all added files.
     public static void writeStaging(final Directory tree) throws IOException {
         File file = new File("./.jit/staging/staging.ser");
         file.delete();
@@ -38,6 +40,7 @@ public class FileUtils {
         out.close();
     }
 
+    // Deserializes the saved staging tree and returns it.
     public static Directory readStaging(String path) throws IOException, ClassNotFoundException {
         ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(
                 new FileInputStream("./.jit/staging/staging.ser")));
@@ -50,6 +53,7 @@ public class FileUtils {
 
     }
 
+    // Hash the object with the example algorithm of GRIPS.
     public static String hashObject(byte[] content) throws NoSuchAlgorithmException {
 
         MessageDigest md = MessageDigest.getInstance("SHA-1");

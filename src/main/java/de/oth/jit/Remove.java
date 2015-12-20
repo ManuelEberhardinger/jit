@@ -9,8 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- *
- * @author manueleberhardinger
+ * Remove a file from the staging tree.
+ * 
  */
 public class Remove implements ICommand {
 
@@ -35,6 +35,7 @@ public class Remove implements ICommand {
         return _file;
     }
 
+    // Remove a file from the staging tree.
     @Override
     public boolean execute(String arg) throws IOException, ClassNotFoundException {
         if (arg.equals("") || arg == null) {
@@ -46,6 +47,7 @@ public class Remove implements ICommand {
         Directory node, tree;
         IType toDel;
 
+        // If the staging file does not exists nothing will happen.
         if (new File(path).exists()) {
             tree = FileUtils.readStaging(path);
         } else {
@@ -53,12 +55,18 @@ public class Remove implements ICommand {
             return false;
         }
         node = tree;
+        
+        // Split the path in the single folders.
         String[] folders = arg.split("/");
+        
+        // Walk through the existing tree.
         for (int i = 0; i < folders.length; i++) {
             if(folders[i].equals(""))
                 continue;
             
+            // If we reach the last element, we have to delete it, otherwise we will get the next node of the tree.
             if (i == folders.length-1 && node.getNext(folders[folders.length - 1]) != null) {
+                // get the next node of the tree to delete it.
                 toDel = node.getNext(folders[folders.length - 1]);
                 if (toDel.getName().equals(folders[folders.length - 1])) {
                     if (node.remove(toDel)) {
@@ -68,7 +76,8 @@ public class Remove implements ICommand {
                     } else {
                         System.out.println("File doesn't exists.");
                     }
-
+                    
+                    // Serialize the tree.
                     FileUtils.writeStaging(tree);
                     return true;
                 }
